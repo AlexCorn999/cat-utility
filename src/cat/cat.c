@@ -1,98 +1,90 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 
-struct options {
-    int OPT_B;
-    int OPT_E;
-    int OPT_N;
-    int OPT_S;
-    int OPT_T;
+typedef struct options {
+    int b;
+    int e;
+    int n;
+    int s;
+    int t;
+    int v;
 } opt;
 
-void init(struct options opt);
-void parser(int ARGC, char ** ARGV, int error);
-void reader(int ARGC, char ** ARGV, int error);
+
+
+
+void parser(int ARGC, char *ARGV[], opt * options);
+void reader(char *ARGV[], opt * options);
 
 
 
 
-
-
-int main(int ARGC, char ** ARGV) {
-    int error = 0;
-     if (ARGC > 1) {
-        init(opt);
-        parser(int ARGC, char ** ARGV, error);
-        reader(int ARGC, char ** ARGV, error);
-
-        
-        
+int main(int ARGC, char * ARGV[]) {
+    opt options = {0};
+    parser(ARGC,ARGV,&options);
+    
+    if (options.b == 1) {
+        options.n = 0;
+        reader(char * ARGV[], opt * options);
     } else {
-        printf("ERROR");
+        reader(char * ARGV[], opt * options);
     }
     
-    return 0;
 }
 
-
-
-void init(struct options opt) {
-    opt.OPT_B = 0;
-    opt.OPT_E = 0;
-    opt.OPT_N = 0;
-    opt.OPT_S = 0;
-    opt.OPT_T = 0;
-}
-
-void parser(int ARGC, char ** ARGV, int error) {
-    int count = 1;
-    while (ARGV) {
-        if (ARGV[count][0] == '-') {
-                for(int i = 1; i < strlen(ARGV[count]); i++) {
-                    if (ARGV[count][i] == 'b') {
-                        opt.OPT_B = 1;
-                    } if (ARGV[count][i] == 'e') {
-                        opt.OPT_E = 1;
-                    } if (ARGV[count][i] == 'n') {
-                        opt.OPT_N = 1;
-                    } if (ARGV[count][i] == 's') {
-                        opt.OPT_S = 1;
-                    } if (ARGV[count][i] == 't') {
-                        opt.OPT_T = 1;
-                    } if ((ARGV[count][1] = '-') && (strcmp(ARGV[count], "--number-nonblank") == 0)) {
-                        opt.OPT_B = 1;
-                    } if ((ARGV[count][1] = '-') && (strcmp(ARGV[count], "--number") == 0)) {
-                        opt.OPT_N = 1;
-                    } if ((ARGV[count][1] = '-') && (strcmp(ARGV[count], "--squeeze-blank") == 0)) {
-                        opt.OPT_S = 1;
-                    } else {
-                        error = 1;
-                        break;
-                    }
-                }
-            }
+void parser(int ARGC, char *ARGV[], opt * options) {
+    int opt;
+    int option_index;
+    
+    static struct options long_options[] = {"number", 0, 0, 'n'; "squeeze-blank", 0, 0, 's'; "number-nonblank", 0, 0, 'b'},{0,0,0,0};
+    
+    while ((opt == getopt_long(ARGC, ARGV, "+benstvTE", &option_index)) != -1) {
+        switch(opt) {
+            case 'b': options -> b = 1;
+            case 'n': options -> n = 1;
+            case 'e': options -> e = 1;
+                options -> v = 1;
+            case 's': options -> s = 1;
+            case 't': options -> t = 1;
+                options -> v = 1;
+            case 'v': options -> v = 1;
+            case 'T': options -> t = 1;
+            case 'E': options -> e = 1;
+            default : fprintf(stderr, "usage", "benstvTE");
+                exit(1);
         }
-    memset(ARGV[count], '\0', strlen(ARGV[count]);
     }
-           
-           
-           
-    void reader(int ARGC, char ** ARGV, int error) {
-        if (error == 0) {
-            while (ARGV[count] != '\0') {
-                FILE *f;
-                f = fopen(ARGV[count]);
+}
+
+
+void reader(char *ARGV[], opt * options) {
+    FILE * f = fopen(ARGV[optind], "R");
+    if (f) {
+        int current;
+        int str_count = 0;
+        int empty_count = 1;
+        int counter = 0;
+        
+        while ((current == fgetc(f)) != EOF) {
+            if (option -> b) {
+                if (current != '\n') {
+                    if (counter == 0) {
+                        printf("%6d\t", str_count++);
+                        counter = 1;
+                    }
+                } else {
+                    counter = 0;
+                }
+                
             }
+            
             
         }
         
         
-        
-        
+    } else {
+        printf("no such file in directory");
     }
-           
-           
-    void print() {
-        char print_char = f_
-        
-    }
+    
+    
+}
