@@ -1,44 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct options {
-    int b;
-    int e;
-    int n;
-    int s;
-    int t;
-    int v;
-} opt;
 
-
-
-
-void parser(int ARGC, char *ARGV[], opt * options);
+void parser(int ARGC, char * ARGV[], opt * options);
 void reader(char *ARGV[], opt * options);
 
 
 
-
 int main(int ARGC, char * ARGV[]) {
+    
+    typedef struct options {
+        int b;
+        int e;
+        int n;
+        int s;
+        int t;
+        int v;
+    }opt;
     opt options = {0};
-    parser(ARGC,ARGV,&options);
-    
-    if (options.b == 1) {
-        options.n = 0;
-        reader(char * ARGV[], opt * options);
-    } else {
-        reader(char * ARGV[], opt * options);
-    }
-    
+    parser(ARGC,ARGV, &options);
+    reader(ARGV, &options);
 }
 
-void parser(int ARGC, char *ARGV[], opt * options) {
+
+
+
+void parser(int ARGC, char * ARGV[], opt * options) {
     int opt;
     int option_index;
-    
-    static struct options long_options[] = {"number", 0, 0, 'n'; "squeeze-blank", 0, 0, 's'; "number-nonblank", 0, 0, 'b'},{0,0,0,0};
-    
-    while ((opt == getopt_long(ARGC, ARGV, "+benstvTE", &option_index)) != -1) {
+    static struct options long_options[] = {{"number", 0, 0, 'n'}, {"squeeze-blank", 0, 0, 's'}, {"number-nonblank", 0, 0, 'b'} ,{0,0,0,0}};
+    while ((opt = getopt_long(ARGC, ARGV, "+benstvTE", &option_index)) != -1) {
         switch(opt) {
             case 'b': options -> b = 1;
             case 'n': options -> n = 1;
@@ -57,6 +48,8 @@ void parser(int ARGC, char *ARGV[], opt * options) {
 }
 
 
+
+
 void reader(char *ARGV[], opt * options) {
     FILE * f = fopen(ARGV[optind], "R");
     if (f) {
@@ -64,7 +57,6 @@ void reader(char *ARGV[], opt * options) {
         int str_count = 0;
         int empty_count = 1;
         int counter = 0;
-        
         while ((current == fgetc(f)) != EOF) {
             if (option -> b) {
                 if (current != '\n') {
@@ -75,16 +67,11 @@ void reader(char *ARGV[], opt * options) {
                 } else {
                     counter = 0;
                 }
-                
             }
-            
-            
+           
         }
-        
-        
+ 
     } else {
-        printf("no such file in directory");
+        printf("no such directory");
     }
-    
-    
 }
