@@ -17,7 +17,7 @@ void reader(char *ARGV[], opt * options);
 
 
 int main(int ARGC, char * ARGV[]) {
-    opt options = {0};
+    opt options = {0};                                      // зануление каждого поля структуры
     parser(ARGC,ARGV, &options);
     if(options.b == 1) {
         options.n = 0;
@@ -34,7 +34,7 @@ void parser(int ARGC, char * ARGV[], opt * options) {
     int opt;
     int option_index;
     
-    const struct option long_options[] = {
+    static struct option long_options[] = {
         { "number", 0, 0, 'n'},
         { "squeeze-blank", 0,  0, 's'},
         { "number-nonblank", 0, 0, 'b'},
@@ -43,17 +43,24 @@ void parser(int ARGC, char * ARGV[], opt * options) {
     while ((opt=getopt_long(ARGC, ARGV, "+benstvTE",long_options, &option_index)) != -1) {
         switch(opt) {
             case 'b': options -> b = 1;
+                break;
             case 'n': options -> n = 1;
+                break;
             case 'e': options -> e = 1;
                 options -> v = 1;
+                break;
             case 's': options -> s = 1;
+                break;
             case 't': options -> t = 1;
                 options -> v = 1;
+                break;
             case 'v': options -> v = 1;
+                break;
             case 'T': options -> t = 1;
+                break;
             case 'E': options -> e = 1;
-            default : fprintf(stderr, "непонятно");
-                printf("\n%d %d %d %d %d %d", options -> b, options -> n, options -> e, options -> s, options -> t, options -> v);
+                break;
+            default : fprintf(stderr, "usage: cat [-benstuv] [file ...]");
                 exit(1);
         }
     }
@@ -63,14 +70,21 @@ void parser(int ARGC, char * ARGV[], opt * options) {
 
 
 void reader(char *ARGV[], opt * options) {
-    FILE * f = fopen(ARGV[optind], "R");
+    
+    FILE *f;
+    f = fopen(ARGV[optind], "r");
+    
     if (f) {
-        int current;
-        int str_count = 0;
+        char prev = '\n';
+        char current;                                   // текуший символ
+        int str_count = 1;                              // номер строки
         int empty_count = 1;
-        int counter = 0;
+        int counter = 0;                                // счетчик строк обнуляет строку
+        
+        
         while ((current = fgetc(f)) != EOF) {
-            if (options -> b) {
+            
+            if (options -> b == 1) {
                 if (current != '\n') {
                     if (counter == 0) {
                         printf("%6d\t", str_count++);
@@ -80,10 +94,36 @@ void reader(char *ARGV[], opt * options) {
                     counter = 0;
                 }
             }
-           
+            
+            
+            if (options -> n == 1) {
+                if (prev == '\n') {
+                        printf("%6d\t", str_count++);
+                } else {
+                    
+                }
+            }
+            
+            
+            if (options -> e == 1) {
+                if (prev == '\n') {
+                    prev = '$';
+                        printf("%c", prev);
+                } else {
+                    
+                }
+            }
+            
+            
+            
+            
+            putchar(current);
+            prev = current;
         }
- 
     } else {
-        printf("no such directory");
+        printf("No such file or directory");
     }
+    
+    
+    fclose(f);
 }
