@@ -76,6 +76,8 @@ void reader(char *ARGV[], opt * options) {
     
     if (f) {
         char prev = '\n';
+        char flag;
+        char future;
         char current;                                   // текуший символ
         int str_count = 1;                              // номер строки
         int empty_count = 1;
@@ -105,14 +107,24 @@ void reader(char *ARGV[], opt * options) {
             }
             
             
-            if (options -> e == 1) {
+            if (options -> s == 1) {
                 if (prev == '\n') {
-                    prev = '$';
-                        printf("%c", prev);
+                    char next = fgetc(f);
+                    ungetc(next, f);
+                    if (next == '\n') {
+                        continue;
+                    }
                 } else {
                     
                 }
             }
+            
+            
+            
+            
+            
+            
+            
             
             
             
