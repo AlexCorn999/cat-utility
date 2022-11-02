@@ -75,12 +75,12 @@ void reader(char *ARGV[], opt * options) {
     f = fopen(ARGV[optind], "r");
     
     if (f) {
-        char prev = '\n';
+        int prev = '\n';
         char flag;
         char future;
         int q = 0;
         int flag_127 = 0;
-        char current;                                   // текуший символ
+        int current;                                   // текуший символ
         int str_count = 1;                              // номер строки
         int empty_count = 1;
         int counter = 0;                                // счетчик строк обнуляет строку
@@ -130,13 +130,16 @@ void reader(char *ARGV[], opt * options) {
                         current = current + 64;
                         q = 1;
                     }
-                    if (current > 127) {
-                        current = current&127;
+                    if (current > 127 && current < 160 ) {
+                        current = (current&31)+64;
                         flag_127 = 1;
                     }
                     if (current == 127) {
                         current = '?';
                         q = 1;
+                    }
+                    if (current >= 160) {
+                        current = '?';
                     }
  
                 } else {
@@ -159,7 +162,7 @@ void reader(char *ARGV[], opt * options) {
             
             if (options -> t == 1) {
                 if(current == '\t') {
-                    printf("^|");
+                    printf("^I");
                     continue;
                 } else {
                 }
