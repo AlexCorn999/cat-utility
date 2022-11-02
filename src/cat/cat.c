@@ -78,6 +78,7 @@ void reader(char *ARGV[], opt * options) {
         char prev = '\n';
         char flag;
         char future;
+        int q;
         char current;                                   // текуший символ
         int str_count = 1;                              // номер строки
         int empty_count = 1;
@@ -120,17 +121,49 @@ void reader(char *ARGV[], opt * options) {
             }
             
             
+            if (options -> v == 1) {
+                if ((prev >= 0 && prev <= 31 && prev != '\n' && prev != '\t') || prev == 127) {
+                    if (prev >= 0 && prev <= 31 && prev != '\n' && prev != '\t') {
+                        prev = prev + 64;
+                        q = 1;
+                    }
+                    if (prev == 127) {
+                        prev = '?';
+                        q = 1;
+                    }
+                } else {
+                    q = 0;
+                }
+                
+                
+                
+                
+                
+                
+            }
+            
+            
+            if (q == 1) {
+                printf("^%c", prev);
+                prev = current;
+            } else {
+                putchar(current);
+                prev = current;
+            }
+    
+            if (options -> v != 1) {
+                putchar(current);
+                prev = current;
+            } else {
+
+            }
+            
+
             
             
             
             
             
-            
-            
-            
-            
-            putchar(current);
-            prev = current;
         }
     } else {
         printf("No such file or directory");
