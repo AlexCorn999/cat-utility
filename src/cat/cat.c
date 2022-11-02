@@ -17,9 +17,9 @@ void reader(char *ARGV[], opt * options);
 
 
 int main(int ARGC, char * ARGV[]) {
-    opt options = {0};                                      // зануление каждого поля структуры
+    opt options = {0};
     parser(ARGC,ARGV, &options);
-    if(options.b == 1) {
+    if (options.b == 1) {
         options.n = 0;
         reader(ARGV, &options);
     } else {
@@ -80,10 +80,10 @@ void reader(char *ARGV[], opt * options) {
         char future;
         int q = 0;
         int flag_127 = 0;
-        int current;                                   // текуший символ
-        int str_count = 1;                              // номер строки
+        int current;
+        int str_count = 1;
         int empty_count = 1;
-        int counter = 0;                                // счетчик строк обнуляет строку
+        int counter = 0;
         
         
         while ((current = fgetc(f)) != EOF) {
@@ -138,9 +138,9 @@ void reader(char *ARGV[], opt * options) {
                         current = '?';
                         q = 1;
                     }
-                    if (current >= 160) {
-                        current = '?';
-                    }
+          //          if (current >= 160) {
+          //              current = '?';
+          //          }
  
                 } else {
                     q = 0;
