@@ -78,7 +78,8 @@ void reader(char *ARGV[], opt * options) {
         char prev = '\n';
         char flag;
         char future;
-        int q;
+        int q = 0;
+        int flag_127 = 0;
         char current;                                   // текуший символ
         int str_count = 1;                              // номер строки
         int empty_count = 1;
@@ -97,6 +98,8 @@ void reader(char *ARGV[], opt * options) {
                     counter = 0;
                 }
             }
+            
+            
             
             
             if (options -> n == 1) {
@@ -122,41 +125,71 @@ void reader(char *ARGV[], opt * options) {
             
             
             if (options -> v == 1) {
-                if ((prev >= 0 && prev <= 31 && prev != '\n' && prev != '\t') || prev == 127) {
-                    if (prev >= 0 && prev <= 31 && prev != '\n' && prev != '\t') {
-                        prev = prev + 64;
+                if ((current >= 0 && current <= 31 && current != '\n' && current != '\t') || current == 127 || current > 127) {
+                    if (current >= 0 && current <= 31 && current != '\n' && current != '\t') {
+                        current = current + 64;
                         q = 1;
                     }
-                    if (prev == 127) {
-                        prev = '?';
+                    if (current > 127) {
+                        current = current&127;
+                        flag_127 = 1;
+                    }
+                    if (current == 127) {
+                        current = '?';
                         q = 1;
                     }
+ 
                 } else {
                     q = 0;
+                    flag_127 = 0;
                 }
-                
-                
-                
-                
-                
-                
             }
+            
+            
+            
+            if (options -> e == 1) {
+                if(current == '\n') {
+                    printf("$");
+                } else {
+                }
+            }
+            
+            
+            
+            
+            if (options -> t == 1) {
+                if(current == '\t') {
+                    printf("^|");
+                    continue;
+                } else {
+                }
+            }
+            
+            
+            
+            
+            
+            
             
             
             if (q == 1) {
-                printf("^%c", prev);
+                printf("^%c", current);
                 prev = current;
-            } else {
+            } else if (flag_127 == 1) {
+                printf("M-^%c", current);
+                prev = current;
+            }else {
+                prev = current;
                 putchar(current);
-                prev = current;
             }
     
-            if (options -> v != 1) {
-                putchar(current);
-                prev = current;
-            } else {
-
-            }
+            
+            
+   //         if (options -> v != 1) {
+   //             putchar(current);
+   //             prev = current;
+   //         } else {
+   //         }
             
 
             
