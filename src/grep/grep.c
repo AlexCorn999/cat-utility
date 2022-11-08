@@ -20,8 +20,6 @@ typedef struct options {
 void parser(int ARGC, char *ARGV[], opt *options);
 void reader(char *ARGV[], opt *options);
 
-
-
 int main(int ARGC, char *ARGV[]) {
     opt options = {0};
     parser(ARGC, ARGV, &options);
@@ -70,8 +68,6 @@ void parser(int ARGC, char *ARGV[], opt *options) {
 }
 
 
-
-
 void reader(char *ARGV[], opt *options) {
     char search_string [1024];
     strcpy(search_string, ARGV[optind]);
@@ -89,10 +85,7 @@ void reader(char *ARGV[], opt *options) {
     FILE *f;
     f = fopen(ARGV[optind + 1], "r");
     
-    
-    
     if (f) {
-    
         if (options->i == 1) {
             regflag = REG_ICASE;
         }
@@ -105,19 +98,14 @@ void reader(char *ARGV[], opt *options) {
             over = 1;
             
         }
-        
-        
     
     regcomp(&regex, search_string, regflag);
-        
     while (red != EOF) {
         red = getline(&tmp_line, &len, f);
         if (tmp_line && red != EOF) {
             str_count++;
             success = regexec(&regex, tmp_line, 0, NULL, 0);
-            
             find_success++;
-            
             if (success == compare && over != 1 && options->c != 1) {
                 
                 if (options->n == 1) {
@@ -137,11 +125,7 @@ void reader(char *ARGV[], opt *options) {
                 printf("%s", ARGV[optind + 1]);
                 break;
             }
-            
-            
         }
-        
-        
     }
         
         free(tmp_line);

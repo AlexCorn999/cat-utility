@@ -77,13 +77,10 @@ void reader(char *ARGV[], opt *options) {
 
   if (f) {
     int prev = '\n';
-    char flag;
-    char future;
     int q = 0;
     int flag_127 = 0;
     int current;
     int str_count = 1;
-    int empty_count = 1;
     int counter = 0;
 
     while ((current = fgetc(f)) != EOF) {
