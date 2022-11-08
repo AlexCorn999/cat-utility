@@ -73,68 +73,90 @@ void parser(int ARGC, char *ARGV[], opt *options) {
 
 
 void reader(char *ARGV[], opt *options) {
+    char search_string [1024];
+    strcpy(search_string, ARGV[optind]);
+    regex_t regex;
+    int regflag = 0;
+    int red;
+    char * tmp_line = NULL;
+    size_t len = 0;
+    int compare = 0;
+    int success = 0;
+    int str_count = 0;
+    int over = 0;
+    int find_success = 0;
+    
     FILE *f;
     f = fopen(ARGV[optind + 1], "r");
-    int compare = 0;
-    char search_string [1024];      // массив для поиска похожих значений
-    strcpy(search_string, ARGV[optind]);
-    char * tmp_line = NULL;
-    int red;                        // кол-во символов
-    int success = 0;                // для удачного сравнения
-    size_t len = 0;                 // длинна строки
-    int regflag = 0;
-    regex_t regex;
-    
     
     
     
     if (f) {
     
-        printf("%s\n", search_string);
-    if (options->e != 1 && options->f != 1) {
-//        char search_string = ARGV[1];
-    }
+        if (options->i == 1) {
+            regflag = REG_ICASE;
+        }
     
+        if (options->v == 1) {
+            compare = REG_NOMATCH;
+        }
     
-    if (options->i == 1) {
-        regflag = REG_ICASE;                //  улавливает различия регистра
-    }
-    
+        if (options->l == 1) {
+            over = 1;
+            
+        }
         
         
-    if (options->v == 1) {
-        compare = REG_NOMATCH;                //  улавливает различия регистра
-    }
-    
-        search_string [0] = 'w';
-        search_string [1] = 'a';
-        search_string [2] = 's';
     
     regcomp(&regex, search_string, regflag);
-    
-        
         
     while (red != EOF) {
         red = getline(&tmp_line, &len, f);
         if (tmp_line && red != EOF) {
+            str_count++;
             success = regexec(&regex, tmp_line, 0, NULL, 0);
             
+            find_success++;
             
-            if (success == compare) {
+            if (success == compare && over != 1 && options->c != 1) {
+                
+                if (options->n == 1) {
+                    printf("%d:", str_count);
+                }
+                
+                if (options->h != 1) {
+                    printf("%s", ARGV[optind + 1]);
+                }
+                
+                
                 printf("%s", tmp_line);
+                
             }
             
-            
+            if (success == compare && over == 1) {
+                printf("%s", ARGV[optind + 1]);
+                break;
+            }
             
             
         }
         
         
-        
     }
-    
-    
+        
+        free(tmp_line);
+        regfree(&regex);
+        
+        if (options->c == 1) {
+            printf("%s:", ARGV[optind + 1]);
+            printf("%d", find_success);
+        }
+        
+        
+        
     } else {
               printf("No such file or directory");
     }
+    
     }
+
