@@ -150,7 +150,7 @@ void reader(char *ARGV[], opt *options) {
         
 
         if (options->e == 1) {
-          if (prev == '\n' && current == '\n' && options->n == 0) {
+          if (prev == '\n' && current == '\n' && (options->n == 0 || options->b == 1) && (options->s == 0 || options->t == 0 || options->v == 0)) {
             printf("      	$");
           } else if (current == '\n') {
             printf("$");
