@@ -68,76 +68,109 @@ void parser(int ARGC, char *ARGV[], opt *options) {
 }
 
 void reader(char *ARGV[], opt *options) {
-  char search_string[1024];
-  strcpy(search_string, ARGV[optind]);
-  regex_t regex;
-  int regflag = 0;
-  int red = 0;
-  char *tmp_line = NULL;
-  size_t len = 0;
-  int compare = 0;
-  int success = 0;
-  int str_count = 0;
-  int over = 0;
-  int find_success = 0;
+  // флаг для 2 файлов
+  int moreFile = 0;
+  // флаг для ошибок
+  int fileYes = 0;
 
-  optind++;
-  while (ARGV[optind]) {
-    FILE *f = fopen(ARGV[optind], "r");
+  if (ARGV[optind]) {
+    // сохраняет регулярное выражение
+    char search_string[1024];
 
-    if (f) {
-      if (options->i == 1) {
-        regflag = REG_ICASE;
+    // копирует значение в массив
+    strcpy(search_string, ARGV[optind]);
+
+    while (ARGV[optind]) {
+      if (ARGV[optind + 2]) {
+        moreFile = 1;
       }
+      // структура regex
+      regex_t regex;
+      // для флагов
+      int regflag = 0;
+      // для getline
+      int red = 0;
+      // временная линия указатель на строку
+      char *tmp_line = NULL;
+      // длина строки
+      size_t len = 0;
+      int compare = 0;
+      int success = 0;
+      int str_count = 0;
+      int over = 0;
+      // поиск совпадений кол-во
+      int find_success = 0;
 
-      if (options->v == 1) {
-        compare = REG_NOMATCH;
-      }
+      FILE *f = fopen(ARGV[optind + 1], "r");
 
-      if (options->l == 1) {
-        over = 1;
-      }
+      if (f) {
+        // игнорирование регистра
+        if (options->i == 1) {
+          regflag = REG_ICASE;
+        }
 
-      regcomp(&regex, search_string, regflag);
-      while (red != EOF) {
-        red = getline(&tmp_line, &len, f);
-        if (tmp_line && red != EOF) {
-          str_count++;
-          success = regexec(&regex, tmp_line, 0, NULL, 0);
-          find_success++;
-          if (success == compare && over != 1 && options->c != 1) {
-            if (options->n == 1) {
-              printf("%d:", str_count);
+        // инверсия поиска
+        if (options->v == 1) {
+          compare = REG_NOMATCH;
+        }
+
+        if (options->l == 1) {
+          over = 1;
+        }
+
+        // превращение в регулярное выражение
+        regcomp(&regex, search_string, regflag);
+
+        while (red != EOF) {
+          // получаем строку из файла
+          red = getline(&tmp_line, &len, f);
+
+          // если не конец и помять выделилась
+          if (tmp_line && red != EOF) {
+            str_count++;
+            // поиск строки из регулярного выражения
+            success = regexec(&regex, tmp_line, 0, NULL, 0);
+
+            if (success == compare) {
+              find_success++;
             }
 
-            if (options->h != 1) {
-              printf("%s", ARGV[optind + 1]);
+            // если удачно находит
+            if (success == compare && over != 1 && options->c != 1) {
+              if (options->h != 1 && moreFile == 1) {
+                printf("%s:", ARGV[optind + 1]);
+              }
+
+              if (options->n == 1) {
+                printf("%d:", str_count);
+              }
+
+              printf("%s", tmp_line);
             }
 
-            printf("%s", tmp_line);
-          }
-
-          if (success == compare && over == 1) {
-            printf("%s", ARGV[optind + 1]);
-            break;
+            if (success == compare && over == 1 && options->l == 1) {
+              printf("%s\n", ARGV[optind + 1]);
+              break;
+            }
           }
         }
+
+        if (options->c == 1) {
+          printf("%s:", ARGV[optind + 1]);
+          printf("%d", find_success);
+          printf("\n");
+        }
+
+        free(tmp_line);
+        regfree(&regex);
+        fileYes = 1;
+
+      } else if (fileYes == 0) {
+        fprintf(stderr, "grep: %s: No such file or directory\n", ARGV[optind]);
       }
 
-      free(tmp_line);
-      regfree(&regex);
-
-      if (options->c == 1) {
-        printf("%s:", ARGV[optind + 1]);
-        printf("%d", find_success);
-      }
-
-    } else {
-      fprintf(stderr, "grep: %s: No such file or directory\n",
-              ARGV[optind + 2]);
-      break;
+      fclose(f);
+      optind++;
     }
-    fclose(f);
-    optind++;
   }
 }
