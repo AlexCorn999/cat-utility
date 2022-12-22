@@ -160,10 +160,10 @@ void reader(char *ARGV[], opt *options) {
           putchar(current);
         }
       }
+      fclose(f);
     } else {
       fprintf(stderr, "cat: %s: No such file or directory\n", ARGV[optind]);
     }
-    fclose(f);
     optind++;
   }
 }

@@ -101,7 +101,10 @@ void reader(char *ARGV[], opt *options) {
       // поиск совпадений кол-во
       int find_success = 0;
 
-      FILE *f = fopen(ARGV[optind + 1], "r");
+      FILE *f = NULL;
+      if (ARGV[optind + 1]) {
+        f = fopen(ARGV[optind + 1], "r");
+      }
 
       if (f) {
         // игнорирование регистра
@@ -160,16 +163,15 @@ void reader(char *ARGV[], opt *options) {
           printf("%d", find_success);
           printf("\n");
         }
-
         free(tmp_line);
         regfree(&regex);
         fileYes = 1;
+        fclose(f);
 
       } else if (fileYes == 0) {
         fprintf(stderr, "grep: %s: No such file or directory\n", ARGV[optind]);
       }
 
-      fclose(f);
       optind++;
     }
   }
