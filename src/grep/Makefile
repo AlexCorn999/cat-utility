@@ -1,12 +1,12 @@
-s21_grep :
-	gcc -Wall -Werror -Wextra grep.c -o s21_grep
+alex_grep :
+	gcc -Wall -Werror -Wextra grep.c -o alex_grep
 
 clean :
-	rm s21_grep
+	rm alex_grep
 
 rebuild :
 	make clean
-	make s21_grep
+	make alex_grep
 
 leaks :
 	sh test_leak_grep.sh

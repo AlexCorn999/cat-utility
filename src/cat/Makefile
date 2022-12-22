@@ -1,12 +1,12 @@
-s21_cat :
-	gcc -Wall -Werror -Wextra cat.c -o s21_cat
+alex_cat :
+	gcc -Wall -Werror -Wextra cat.c -o alex_cat
 
 clean :
-	rm s21_cat
+	rm alex_cat
 
 rebuild :
 	make clean
-	make s21_cat
+	make alex_cat
 
 leaks :
 	sh test_leak_cat.sh

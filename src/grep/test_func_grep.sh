@@ -6,12 +6,12 @@ COUNTER=0
 DIFF_RES=""
 
 declare -a tests=(
-"for s21_grep.c s21_grep.h Makefile VAR"
-"for s21_grep.c VAR"
-"-e for -e ^int s21_grep.c s21_grep.h Makefile VAR"
-"-e for -e ^int s21_grep.c VAR"
-"-e regex -e ^print s21_grep.c VAR -f test_ptrn_grep.txt"
-"-e while -e void s21_grep.c Makefile VAR -f test_ptrn_grep.txt"
+"for alex_grep.c alex_grep.h Makefile VAR"
+"for alex_grep.c VAR"
+"-e for -e ^int alex_grep.c alex_grep.h Makefile VAR"
+"-e for -e ^int alex_grep.c VAR"
+"-e regex -e ^print alex_grep.c VAR -f test_ptrn_grep.txt"
+"-e while -e void alex_grep.c Makefile VAR -f test_ptrn_grep.txt"
 )
 
 declare -a extra=(
@@ -41,11 +41,11 @@ declare -a extra=(
 testing()
 {
     t=$(echo $@ | sed "s/VAR/$var/")
-    ./s21_grep $t > test_s21_grep.log
+    ./alex_grep $t > test_alex_grep.log
     grep $t > test_sys_grep.log
-    DIFF_RES="$(diff -s test_s21_grep.log test_sys_grep.log)"
+    DIFF_RES="$(diff -s test_alex_grep.log test_sys_grep.log)"
     (( COUNTER++ ))
-    if [ "$DIFF_RES" == "Files test_s21_grep.log and test_sys_grep.log are identical" ]
+    if [ "$DIFF_RES" == "Files test_alex_grep.log and test_sys_grep.log are identical" ]
     then
       (( SUCCESS++ ))
       echo "\033[31m$FAIL\033[0m/\033[32m$SUCCESS\033[0m/$COUNTER \033[32msuccess\033[0m grep $t"
@@ -53,7 +53,7 @@ testing()
       (( FAIL++ ))
       echo "\033[31m$FAIL\033[0m/\033[32m$SUCCESS\033[0m/$COUNTER \033[31mfail\033[0m grep $t"
     fi
-    rm test_s21_grep.log test_sys_grep.log
+    rm test_alex_grep.log test_sys_grep.log
 }
 
 # специфические тесты

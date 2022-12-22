@@ -8,12 +8,12 @@ DIFF_RES=""
 
 declare -a tests=(
 "s test_text_grep.txt VAR"
-"for s21_grep.c s21_grep.h Makefile VAR"
-"for s21_grep.c VAR"
-"-e for -e ^int s21_grep.c s21_grep.h Makefile VAR"
-"-e for -e ^int s21_grep.c VAR"
-"-e regex -e ^print s21_grep.c VAR -f test_ptrn_grep.txt"
-"-e while -e void s21_grep.c Makefile VAR -f test_ptrn_grep.txt"
+"for alex_grep.c alex_grep.h Makefile VAR"
+"for alex_grep.c VAR"
+"-e for -e ^int alex_grep.c alex_grep.h Makefile VAR"
+"-e for -e ^int alex_grep.c VAR"
+"-e regex -e ^print alex_grep.c VAR -f test_ptrn_grep.txt"
+"-e while -e void alex_grep.c Makefile VAR -f test_ptrn_grep.txt"
 "VAR no_file.txt"
 )
 
@@ -47,8 +47,8 @@ declare -a extra=(
 testing()
 {
     t=$(echo $@ | sed "s/VAR/$var/")
-    leaks -quiet -atExit -- ./s21_grep $t > test_s21_grep.log
-    leak=$(grep -A100000 leaks test_s21_grep.log)
+    leaks -quiet -atExit -- ./alex_grep $t > test_alex_grep.log
+    leak=$(grep -A100000 leaks test_alex_grep.log)
     (( COUNTER++ ))
     if [[ $leak == *"0 leaks for 0 total leaked bytes"* ]]
     then
@@ -59,7 +59,7 @@ testing()
         echo "\033[31m$FAIL\033[0m/\033[32m$SUCCESS\033[0m/$COUNTER \033[31mfail\033[0m grep $t"
 #        echo "$leak"
     fi
-    rm test_s21_grep.log
+    rm test_alex_grep.log
 }
 
 # специфические тесты
